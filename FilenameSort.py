@@ -1,3 +1,17 @@
+"""FilenameSort is a utility to aid in "human-like" sorting of file names.
+
+Normally using sort, ["file_1_10a.png","file_1_1a.png","file_1_5a.png"] would sort as:
+["file_1_10a.png","file_1_1a.png","file_1_5a.png"]
+
+Using the function getSortableList instead results in:
+["file_1_1a.png","file_1_5a.png","file_1_10a.png"]
+
+Which is more like what one would expect.
+
+FilenameSort uses cmpGen to aid sorting."""
+
+__author__ = "David N. Mashburn <david.n.mashburn@gmail.com>"
+
 import numpy as np
 import glob,copy,os
 from time import time
@@ -123,8 +137,3 @@ def cmp_fnames(f1,f2):
     if f1==f2:
         return 0
     return (os.path.getmtime(f1)>os.path.getmtime(f2))*2-1
-
-# TODO : Ah HA!!!  I had an epiphany!!
-# TODO : What I really need to do here is just use glob to find everything matching t or z...
-# TODO : That will keep the arrays smaller and make sorting MUCH faster!
-# TODO : My preference at the moment is to use the 0-padded sorting method because mod times can get just plain weird!
