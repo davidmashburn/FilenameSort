@@ -12,7 +12,6 @@ FilenameSort uses cmpGen to aid sorting."""
 
 __author__ = "David N. Mashburn <david.n.mashburn@gmail.com>"
 
-import numpy as np
 import glob,copy,os
 from time import time
 from cmpGen import cmpGen
@@ -137,3 +136,4 @@ def cmp_fnames(f1,f2):
     if f1==f2:
         return 0
     return (os.path.getmtime(f1)>os.path.getmtime(f2))*2-1
+
