@@ -44,10 +44,13 @@ def getSortableList(s):
     sortableList.append(os.path.splitext(s)[1])
     return sortableList
 
-def getSortedListOfFiles(d,globArg='*[!.txt]'):
+def getSortedListOfFiles(d,globArg='*[!.txt]',exclude_dirs=True):
     files = glob.glob(os.path.join(d,globArg))
     
     files.sort(cmpGen(getSortableList))
+    
+    if exclude_dirs:
+        files = [f for f in files if not os.path.isdir(f)]
     
     return files
 
@@ -72,7 +75,7 @@ def getSortedListOfNumericalEquivalentFiles(f,d):
     
     return sortedList
 
-def getSortedListOfFilesOld(d,globArg='*[!.txt]'):# old attmpt at this using re... way too complicated...
+def getSortedListOfFilesOld(d,globArg='*[!.txt]'):# old attempt at this using re... way too complicated...
     import re
     files = glob.glob(os.path.join(d,globArg))
     l=copy.deepcopy(files)
