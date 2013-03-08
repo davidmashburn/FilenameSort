@@ -1,4 +1,4 @@
-FilenameSort is a utility to aid in "human-like" sorting of file names.
+FilenameSort is a utility to aid in natural or "human-like" sorting of file names.
 
 Normally using sort, ["file_1_10a.png","file_1_1a.png","file_1_5a.png"] would sort as:
 ["file_1_10a.png","file_1_1a.png","file_1_5a.png"]

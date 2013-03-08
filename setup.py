@@ -9,7 +9,7 @@ setup(
     scripts=[],
     url='http://pypi.python.org/pypi/FilenameSort/',
     license='LICENSE.txt',
-    description='',
+    description='utility to aid in natural or "human-like" sorting of file names',
     long_description=open('README.rst').read(),
     install_requires=[
                       'cmpGen>=0.1'
