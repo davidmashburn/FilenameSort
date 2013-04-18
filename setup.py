@@ -1,8 +1,12 @@
 from distutils.core import setup
 
+# Read the version number
+with open("FilenameSort/_version.py") as f:
+    exec(f.read())
+
 setup(
     name='FilenameSort',
-    version='0.1.3',
+    version=__version__, # use the same version that's in _version.py
     author='David N. Mashburn',
     author_email='david.n.mashburn@gmail.com',
     packages=['FilenameSort'],
@@ -11,7 +15,5 @@ setup(
     license='LICENSE.txt',
     description='utility to aid in natural or "human-like" sorting of file names',
     long_description=open('README.rst').read(),
-    install_requires=[
-                      'cmpGen>=0.1'
-                     ],
+    install_requires=[], # No dependencies!
 )

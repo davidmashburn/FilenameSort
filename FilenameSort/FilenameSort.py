@@ -6,15 +6,12 @@ Normally using sort, ["file_1_10a.png","file_1_1a.png","file_1_5a.png"] would so
 Using the function getSortableList instead results in:
 ["file_1_1a.png","file_1_5a.png","file_1_10a.png"]
 
-Which is more like what one would expect.
-
-FilenameSort uses cmpGen to aid sorting."""
+Which is more like what one would expect."""
 
 __author__ = "David N. Mashburn <david.n.mashburn@gmail.com>"
 
 import glob,copy,os
 from time import time
-from cmpGen import cmpGen
 
 # The two dinky little functions sort files according to human-based sorting...
 # They avoid the usual sorting problem with non-0 buffered integers in names...:
@@ -47,7 +44,7 @@ def getSortableList(s):
 def getSortedListOfFiles(d,globArg='*[!.txt]',exclude_dirs=True):
     files = glob.glob(os.path.join(d,globArg))
     
-    files.sort(cmpGen(getSortableList))
+    files.sort(key=getSortableList)
     
     if exclude_dirs:
         files = [f for f in files if not os.path.isdir(f)]
@@ -115,7 +112,7 @@ def getSortedListOfFilesOld(d,globArg='*[!.txt]'):# old attempt at this using re
     if not l[0].isdigit():
         pass
     
-    l.sort(cmpGen(lambda x: float(x[start:end])))
+    l.sort( key = lambda x: float(x[start:end]) )
     
     return l
 
