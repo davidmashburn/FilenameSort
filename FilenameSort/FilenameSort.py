@@ -72,6 +72,70 @@ def getSortedListOfNumericalEquivalentFiles(f,d):
     
     return sortedList
 
+#########################################################################
+## Some fancy list functions to deal with missing values in file lists ##
+## only public functions are fillingMissingWithNone and                ##
+## getSortedListOfFiles_fillingMissingWithNone                         ##
+#########################################################################
+
+def _NDListBuilder(val,shape):
+    '''Utility function to build an empty (list-of...)-lists with n-dimensional shape'''
+    if len(shape)>1:
+        return [ _NDListBuilder(val,shape[1:]) for i in range(shape[0]) ]
+    else:
+        return [ val for i in range(shape[0]) ]
+
+def _SetNDListValue(ndList,ndims,indexList, value):
+    '''Set a value in the ndList, equivalent to ndList[indexList[0]][indexList[1]]... '''
+    assert len(indexList)==ndims
+    # Dig down into the nested lists:
+    l = ndList
+    for i in indexList[:-1]:
+        l = l[i]
+    # And in the bottom-most list, set the value:
+    l[indexList[-1]] = value
+
+def _flattenNDList(ndList,ndims):
+    '''Flatten an ND-list in place; also returns list'''
+    for i in range(ndims-1):
+        ndList = [j for i in ndList for j in i]
+    return ndList
+
+def fillingMissingWithNone(sortedListOfFiles,startVal=0):
+    '''Assumes that any time there is a numerical value, there should be a range of these in every sub-tree'''
+    
+    assert startVal in [0,1], 'startVal must be either 0 or 1!'
+    
+    split = map(getSortableList,sortedListOfFiles)
+    splitT = zip(*split)
+    ndims = len(splitT)
+    maximums = [None for i in range(ndims)]
+    variations = [None for i in range(ndims)]
+    for i in range(ndims):
+        if all([ isinstance(j,int) for j in splitT[i] ]):
+            if startVal==1:
+                assert not min(splitT[i])==0, "Shouldn't have value of 0 if counting from 1! Change startVal to 0!"
+            variations[i] = range(startVal,splitT[i][-1]+1)
+        else:
+            variations[i] = sorted(set(splitT[i]))
+    
+    ndList = _NDListBuilder( None, shape = map(len,variations) )
+    
+    for v in split:
+        indexes = [ variations[i].index(v[i]) for i in range(ndims) ]
+        value = os.path.join( v[0] , ''.join(map(str,v[1:])) )
+        _SetNDListValue(ndList,ndims,indexes, value )
+
+    return _flattenNDList(ndList,len(variations))
+
+def getSortedListOfFiles_fillingMissingWithNone(d,globArg,startVal=0):
+    '''Assumes that any time there is a numerical value, there should be a range of these in every sub-tree'''
+    return fillingMissingWithNone( getSortedListOfFiles(d,globArg), startVal=startVal )
+
+########################################################################
+##                              Old                                   ##
+########################################################################
+
 def getSortedListOfFilesOld(d,globArg='*[!.txt]'):# old attempt at this using re... way too complicated...
     import re
     files = glob.glob(os.path.join(d,globArg))
