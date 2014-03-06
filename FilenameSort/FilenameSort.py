@@ -103,6 +103,8 @@ def _flattenNDList(ndList,ndims):
 
 def fillingMissingWithNone(sortedListOfFiles,startVal=0):
     '''Assumes that any time there is a numerical value, there should be a range of these in every sub-tree'''
+    if sortedListOfFiles==[]:
+        return []
     
     assert startVal in [0,1], 'startVal must be either 0 or 1!'
     
