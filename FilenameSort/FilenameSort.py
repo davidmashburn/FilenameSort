@@ -8,6 +8,9 @@ Using the function getSortableList instead results in:
 
 Which is more like what one would expect."""
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 __author__ = "David N. Mashburn <david.n.mashburn@gmail.com>"
 
 import glob,copy,os
@@ -108,8 +111,8 @@ def fillingMissingWithNone(sortedListOfFiles,startVal=0):
     
     assert startVal in [0,1], 'startVal must be either 0 or 1!'
     
-    split = map(getSortableList,sortedListOfFiles)
-    splitT = zip(*split)
+    split = list(map(getSortableList,sortedListOfFiles))
+    splitT = list(zip(*split))
     ndims = len(splitT)
     maximums = [None for i in range(ndims)]
     variations = [None for i in range(ndims)]
@@ -117,11 +120,11 @@ def fillingMissingWithNone(sortedListOfFiles,startVal=0):
         if all([ isinstance(j,int) for j in splitT[i] ]):
             if startVal==1:
                 assert not min(splitT[i])==0, "Shouldn't have value of 0 if counting from 1! Change startVal to 0!"
-            variations[i] = range(startVal,splitT[i][-1]+1)
+            variations[i] = list(range(startVal,splitT[i][-1]+1))
         else:
             variations[i] = sorted(set(splitT[i]))
     
-    ndList = _NDListBuilder( None, shape = map(len,variations) )
+    ndList = _NDListBuilder( None, shape = list(map(len,variations)) )
     
     for v in split:
         indexes = [ variations[i].index(v[i]) for i in range(ndims) ]
@@ -169,7 +172,7 @@ def getSortedListOfFilesOld(d,globArg='*[!.txt]'):# old attempt at this using re
     # Find any non-numerical parts of the filename
     m=re.findall('\\D*',l[0][start:end])
     if m!=[]:
-        print m
+        print(m)
         for i in m:
             l[0].find()
     
